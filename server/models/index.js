@@ -4,19 +4,25 @@ module.exports = {
   messages: {
 
     // a function which produces all the messages
-    get: function () {
-      db.connection.query('SELECT * from MESSAGES', function(err, rows, fields) {
+    get: function (callback) {
+      db.connection.query('SELECT * from MESSAGES', function(err, results) {
+        console.log('message get', results);
         if (err) {
           throw err;
+        } else {
+          callback(err, results);
         }
       });
     },
 
     // a function which can be used to insert a message into the database
-    post: function (text) {
-      db.connection.query(`INSERT INTO MESSAGES message (${text})`, function(err, rows, fields) {
+    post: function (reqContent, callback) {
+      console.log('messages post', reqContent);
+      db.connection.query(`INSERT INTO MESSAGES (message) VALUES ("${reqContent.message}")`, function(err, results) {
         if (err) {
           throw err;
+        } else {
+          callback(results);
         }
       });
     }
@@ -24,17 +30,22 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {
-      db.connection.query('SELECT * from USERS', function(err, rows, fields) {
+    get: function (callback) {
+      db.connection.query('SELECT * from USERS', function(err, results) {
         if (err) {
           throw err;
+        } else {
+          callback(results);
         }
       });
     },
-    post: function (username, first, last, loc, age, gender) {
-      db.connection.query(`INSERT INTO USERS (username, firstName, lastName, location, age, gender) VALUES (${username, first, last, loc, age, gender})`, function(err, rows, fields) {
+    post: function (body, callback) {
+      console.log('users post', body);
+      db.connection.query(`INSERT INTO USERS (username) VALUES ("${body.username}")`, function(err, results) { 
         if (err) {
           throw err;
+        } else {
+          callback(results);
         }
       });
     }

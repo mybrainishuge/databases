@@ -12,4 +12,4 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-exports.connection = connection;
+module.exports.connection = connection;

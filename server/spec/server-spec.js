@@ -34,7 +34,7 @@ describe('Persistent Node Chat Server', function() {
       uri: 'http://127.0.0.1:3000/classes/users',
       json: { username: 'Valjean' }
     }, function () {
-      // Post a message to the node chat server:
+      // Post a message to tmyhe node chat server:
       request({
         method: 'POST',
         uri: 'http://127.0.0.1:3000/classes/messages',
@@ -67,7 +67,7 @@ describe('Persistent Node Chat Server', function() {
 
   it('Should output all messages from the DB', function(done) {
     // Let's insert a message into the db
-    var queryString = '';
+    var queryString = 'select * from messages';
     var queryArgs = [];
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
