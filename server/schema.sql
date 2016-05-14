@@ -11,6 +11,7 @@ CREATE TABLE rooms (
 
 CREATE TABLE users (
   id int(5) auto_increment,
+  username varchar(20),
   firstName varchar(20),
   lastName varchar(20),
   location varchar(20),
