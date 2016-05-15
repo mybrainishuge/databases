@@ -1,58 +1,94 @@
 var db = require('../db/index.js');
 
+// var validateUser = function(reqBody) {
+//   // check if username exists
+//   var id;
+//   console.log('inside validateUser');
+//   db.connection.query(`select username from users where username="${reqBody.username}"`, function(err, result) {
+//     // if does NOT exist
+//     if (err) {
+//       console.log(err);
+//     }
+//     console.log('inside first query');
+//     console.log('result length:', result.length);
+//     if (result.length === 0) {
+//       console.log('user not found');
+//       // add username to users table
+//       db.connection.query(`insert into users (username) values ("${reqBody.username}")`, function(err, result) {
+//         if (err) {
+//           console.log(err);
+//         }
+//         db.connection.query(`select id from users where username="${reqBody.username}"`, function(err, result) {
+//           if (err) {
+//             console.log(err);
+//           }
+//           id = result;
+//           console.log('retrieving user id:', result);
+//           console.log('new result length:', result.length);
+//         });
+        
+//       });
+//     }
+//   });
+//   // retrieve user id
+//   return id;
+// };
+
+
 module.exports = {
   messages: {
 
-    // a function which produces all the messages
     get: function (callback) {
-      // db.connection.query('SELECT * from MESSAGES', function(err, results) {
-      //   console.log('message get', results);
-      //   if (err) {
-      //     throw err;
-      //   } else {
-      //     callback(err, results);
-      //   }
-      // });
+      var queryStr = 'seelct messages.id, messages.message, messages.room_id, users.username from messages \
+        left outer join users on (messages.user_id = users.id) \
+        order by messages.id desc';
+
+      db.connection.query(queryStr, function(err, result) {
+        if (err) {
+          console.log(err);
+        }
+        callback(results);
+      });
     },
 
-    // a function which can be used to insert a message into the database
     post: function (reqBody, callback) {
-      vvalidte(roomname, username);
-      console.log('models messages post', reqBody.message);
-      db.connection.query(`INSERT INTO MESSAGES (message, room, user) VALUES ("${reqBody.message}")`, function(err, results) {
+      var queryStr = 'insert into mesages(message, user_id, roomname) \
+        values (?, (select id from users where username = ? limit 1), ?)';
+
+      db.connection.query(queryStr, params, function(err, results) {
         if (err) {
-          throw err;
-        } else {
-          callback(results);
+          console.log(err);
         }
+        callback(results);
       });
     }
   },
 
   users: {
-    // Ditto as above.
     get: function (callback) {
-      // db.connection.query('SELECT * from USERS', function(err, results) {
-      //   if (err) {
-      //     throw err;
-      //   } else {
-      //     callback(results);
-      //   }
-      // });
-    },
-    post: function (reqBody, callback) {
-      console.log('models users post', reqBody.username);
-      db.connection.query(`INSERT INTO USERS (username) VALUES ("${reqBody.username}")`, function(err, results) { 
+      var queryStr = `FILL_ME_IN`;
+
+      db.connection.query(queryStr, params, function(err, results) {
         if (err) {
-          throw err;
-        } else {
-          callback(results);
+          console.log(err);
         }
+        callback(results);
+      });
+      
+    },
+
+    post: function (reqBody, callback) {
+      var queryStr = `insert into users (username) values ("${reqBody.username}")`;
+
+      db.connection.query(queryStr, function(err, results) {
+        if (err) {
+          console.log(err);
+        }
+        callback(err, results);
       });
     }
   }
 };
 
-var validate = function() {
 
-};
+

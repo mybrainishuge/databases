@@ -1,43 +1,77 @@
 var models = require('../models');
-var Promise = require('bluebird');
+var bluebird = require('bluebird');
 
 module.exports = {
   messages: {
     get: function (req, res) {
+
+      Message.findAll({ include: [User] })
+        .complete(function(error, results) {
+          res.json(results);
+        });
+
       // models.messages.get(function(err, results) {
-      //   console.log('this is the get', results);
       //   if (err) {
-      //     throw err;
-      //   } else {
-      //     res.send(results);
+      //     console.log(err);
       //   }
+      //   res.json(results);
+      // });
+    },
+
+    post: function (req, res) {
+      User.findOrCreate({username: req.body.username})
+        .complete(function(err, user) {
+          var params = {
+            message: req.body.message, 
+            userid: user.id, 
+            roomname: req.body.room_id
+          };
+        });
+
+      Message.create(mesparams)
+        .complete(function(err, results) {
+          res.sendStatus(201);
+        });
+
+      // models.messages.post(req.body, function(err, results) {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   res.json(results);
       // });
 
-    }, // a function which handles a get request for all messages
-    post: function (req, res) {
-      models.messages.post(req.body, function(err, results) {
-        console.log('controller messages post', req);
-        if (err) {
-          throw err;
-        }
-      });
-      res.end();
-
-    } // a function which handles posting a message to the database
+    }
   },
 
   users: {
-    // Ditto as above
-    get: function (req, res) {},
+    get: function (req, res) {
+      User.findAll()
+        .complete(function(error, results) {
+          res.json(results);
+        });
+
+      // models.users.get(function(err, results) {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   res.json(results);
+      // });
+    },
 
     post: function (req, res) {
-      models.users.post(req.body, function(err, results) {
-        console.log('controller users post', req.body);
-        if (err) {
-          throw err;
-        }
-      });
-      res.end();
+      User.create({username: req.body.username})
+        .complete(function(err, user) {
+          res.sendStatus(201);
+        });
+
+      // var params = [req.body.username];
+      // models.users.post(req.body, function(err, results) {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   console.log(req);
+      //   res.json(results);
+      // });
     }
   }
 };

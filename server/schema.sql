@@ -5,12 +5,14 @@ USE chat;
 CREATE TABLE rooms (
   id int(5) auto_increment,
   roomname varchar(20),
+  UNIQUE KEY roomname(roomname),
   primary key (id)
 );
 
 CREATE TABLE users (
   id int(5) auto_increment,
   username varchar(20),
+  UNIQUE KEY username(username),
   primary key (id)
 );
 
